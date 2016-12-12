@@ -20,7 +20,9 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.Until;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +34,9 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class UIAutomatorTest {
-    private static final String STRING_TO_BE_TYPED = "UiAutomator";
-    private static final String ESHOP_SAMPLE_PACKAGE = "com.example.muco.eshop";
+    private static final String ESHOP_SAMPLE_PACKAGE = "cn.com.egova.mopad";
+    private static final String CLASS_RADIO_BUTTON = "android.widget.RadioButton";
+    private static final long UI_TIMEOUT = 10000;
 
     private UiDevice mDevice;
 
@@ -44,11 +47,29 @@ public class UIAutomatorTest {
     }
 
     @Test
-    public void testName() throws Exception {
-        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "username"))
-                .setText(STRING_TO_BE_TYPED);
-        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "login"))
-                .click();
+    public void navigateToMonitorPage() throws Exception {
 
+        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "config_btnInstall"))
+                .click();
+        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "serverConfigURL"))
+                .setText("http://192.168.32.179:8080/wudongde/");
+
+        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "config_btnSubmit"))
+                .click();
+        mDevice.findObject(By.res(ESHOP_SAMPLE_PACKAGE, "login_btnSubmit"))
+                .click();
+        BySelector firstAccountSelector = By.clazz(CLASS_RADIO_BUTTON);
+        if (mDevice.wait(Until.hasObject(firstAccountSelector), UI_TIMEOUT)) {
+            mDevice.findObjects(firstAccountSelector).get(1).click();
+        }
+
+        mDevice.findObjects(firstAccountSelector).get(3).click();
+
+        BySelector config_item_exit_rlt = By.res(ESHOP_SAMPLE_PACKAGE, "config_item_exit_rlt");
+        if (mDevice.wait(Until.hasObject(config_item_exit_rlt), UI_TIMEOUT)) {
+            mDevice.findObject(config_item_exit_rlt)
+                    .click();
+
+        }
     }
 }
