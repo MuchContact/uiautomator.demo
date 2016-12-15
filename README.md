@@ -20,3 +20,6 @@ This project uses the Gradle build system. You don't need an IDE to build and ex
 The application will be started on the device/emulator and a series of actions will be performed automatically.
 
 If you are using Android Studio, the *Run* window will show the test results.
+
+# Comment
+1. input for password field won't work below <b>Android 5.0</b>
